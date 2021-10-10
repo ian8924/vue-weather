@@ -1,36 +1,28 @@
 <script>
 import { ref } from "vue";
-import axios from "axios";
-import inputDelay from "./utils/inputDelay";
+import ChooseCitySection from "./components/ChooseCitySection.vue";
+import ShowChartsSection from "./components/ShowChartsSection.vue";
+
 export default {
+  components: {
+    ChooseCitySection,
+    ShowChartsSection,
+  },
   setup() {
-    const searchText = ref("");
-    const searchResults = ref([]);
+    const step = ref(1);
+    const cityWoei = ref({});
 
-    const searchTimeOut = () => {
-      inputDelay(getCityApi);
+    const changeStep = (e) => {
+      step.value = e;
     };
-
-    const getCityApi = () => {
-      if (!searchText.value) {
-        searchResults.value = [];
-        return;
-      }
-      axios
-        .get("/api/location/search/", {
-          params: {
-            query: searchText.value,
-          },
-        })
-        .then((res) => {
-          searchResults.value = [...res.data];
-        });
+    const chooseCity = (i) => {
+      cityWoei.value = { ...i };
     };
-
     return {
-      searchText,
-      searchResults,
-      searchTimeOut,
+      step,
+      cityWoei,
+      changeStep,
+      chooseCity,
     };
   },
 };
@@ -38,21 +30,16 @@ export default {
 
 <template>
   <div class="container">
-    <input
-      type="text"
-      v-model="searchText"
-      @keyup="searchTimeOut"
-      placeholder="Input a city"
+    <ChooseCitySection
+      v-if="step == 1"
+      @changeStep="changeStep"
+      @chooseCity="chooseCity"
     />
-    <div class="search-results">
-      <div class="title">
-        Results : <br />
-        <span> (Click to show details)</span>
-      </div>
-      <div class="result-item" v-for="item in searchResults" :key="item.title">
-        {{ item.title }}
-      </div>
-    </div>
+    <ShowChartsSection
+      v-else
+      :cityWoei="cityWoei"
+      @changeStep="changeStep"
+    ></ShowChartsSection>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -62,30 +49,5 @@ export default {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  input {
-    width: 400px;
-    height: 30px;
-    margin: 20px auto;
-    padding: 0 10px;
-    outline: none;
-  }
-  .search-results {
-    margin: 0 20px;
-    .title {
-      font-weight: 500;
-      span {
-        color: gray;
-        font-size: 12px;
-      }
-    }
-    .result-item {
-      font-size: 14px;
-      margin: 5px 0 0 10px;
-      cursor: pointer;
-      &:hover {
-        color: $blue;
-      }
-    }
-  }
 }
 </style>
