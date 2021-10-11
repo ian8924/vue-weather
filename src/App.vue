@@ -30,16 +30,16 @@ export default {
 
 <template>
   <div class="container">
-    <ChooseCitySection
+    <choose-city-section
       v-if="step == 1"
       @changeStep="changeStep"
       @chooseCity="chooseCity"
     />
-    <ShowChartsSection
+    <show-charts-section
       v-else
       :cityWoei="cityWoei"
       @changeStep="changeStep"
-    ></ShowChartsSection>
+    />
   </div>
 </template>
 <style lang="scss" scoped>
