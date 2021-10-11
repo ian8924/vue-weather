@@ -1,6 +1,5 @@
 
 <script>
-import { onMounted, ref, computed } from "vue";
 export default {
   name: "BarChart",
   props: ["datas", "max", "min"],
@@ -67,14 +66,15 @@ export default {
     justify-content: center;
     align-items: center;
     transition: linear 0.5s all;
-    height: 0;
     .percent-title {
       width: 100%;
-      bottom: -30px;
+      bottom: -40px;
       left: 50%;
       text-align: center;
       margin-left: -50%;
       position: absolute;
+      font-size: 12px;
+      font-weight: 500;
     }
     .percent-value {
       font-weight: 500;
@@ -106,8 +106,7 @@ export default {
       background: rgb(9, 105, 214);
     }
     opacity: 0.7;
-    $value: ($i * 1%);
-    height: $value !important;
+    height: $i * 1%;
     min-height: 10px;
   }
 }

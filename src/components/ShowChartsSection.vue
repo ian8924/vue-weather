@@ -1,6 +1,7 @@
 
 <script>
 import BarChart from "./charts/BarChart.vue";
+import PieChart from "./charts/PieChart.vue";
 import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 export default {
@@ -9,6 +10,7 @@ export default {
   props: ["cityWoei"],
   components: {
     BarChart,
+    PieChart,
   },
   setup(props, context) {
     const consolidatedWeather = ref([]);
@@ -23,7 +25,6 @@ export default {
 
     onMounted(() => {
       let woeid = props.cityWoei.woeid;
-      // let woeid = a.woeid;
       axios.get(`/api/location/${woeid}/`).then((res) => {
         consolidatedWeather.value = [...res.data.consolidated_weather];
       });
@@ -65,13 +66,22 @@ export default {
       });
       return result;
     });
-
+    // 濕度資料
+    const humidities = computed(() => {
+      let result = [];
+      consolidatedWeather.value.forEach((e) => {
+        const { applicable_date, humidity } = e;
+        result.push({ title: applicable_date, value: humidity });
+      });
+      return result;
+    });
     return {
       consolidatedWeather,
       maxTemps,
       minTemps,
       maxDetails,
       minDetails,
+      humidities,
       changeStep,
     };
   },
@@ -82,22 +92,29 @@ export default {
   <div class="back" @click="changeStep(1)">
     <span> &lt; Back </span>
   </div>
-  <h1>{{ cityWoei.title }}</h1>
-
-  <h2>Max Temp</h2>
-  <BarChart
-    class="chart-size"
-    :datas="maxTemps"
-    :max="maxDetails.max"
-    :min="maxDetails.min"
-  ></BarChart>
-  <h2>Min Temp</h2>
-  <BarChart
-    class="chart-size"
-    :datas="minTemps"
-    :max="minDetails.max"
-    :min="minDetails.min"
-  ></BarChart>
+  <h2>{{ cityWoei.title }}</h2>
+  <div class="chart-list">
+    <div class="chart-size">
+      <h3>Max Temp</h3>
+      <bar-chart
+        :datas="maxTemps"
+        :max="maxDetails.max"
+        :min="maxDetails.min"
+      />
+    </div>
+    <div class="chart-size">
+      <h3>Min Temp</h3>
+      <bar-chart
+        :datas="minTemps"
+        :max="minDetails.max"
+        :min="minDetails.min"
+      />
+    </div>
+    <div class="chart-size-auto">
+      <h3>Humidity</h3>
+      <pie-chart :datas="humidities" />
+    </div>
+  </div>
 </template>
     
 <style lang="scss" scoped>
@@ -111,8 +128,15 @@ export default {
     margin: 10px;
   }
 }
-.chart-size {
-  width: 60%;
-  min-width: 400px;
+.chart-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .chart-size {
+    width: 40%;
+  }
+  .chart-size-auto {
+    width: auto;
+  }
 }
 </style>
