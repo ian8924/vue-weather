@@ -1,7 +1,21 @@
-# Vue 3 + Vite
+# vue-weather
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### fetch weatheer-city api to show Data visualization
+using vue3 & proxy api 
+### css PieChart & BarChart 
 
-## Recommended IDE Setup
+<img width="607" alt="截圖 2021-10-11 下午12 15 41" src="https://user-images.githubusercontent.com/47569086/136732591-5cc9972a-36ea-4662-a33b-4040e4bde547.png">
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+<img width="679" alt="截圖 2021-10-11 下午12 15 49" src="https://user-images.githubusercontent.com/47569086/136732521-ffbfe325-203a-4122-98f7-d602bd4ad675.png">
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run dev
+```
+
+
